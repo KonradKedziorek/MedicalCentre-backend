@@ -1,11 +1,14 @@
 package pl.kedziorek.medicalcentreapplication.domain;
 
 import lombok.*;
+import org.apache.commons.text.RandomStringGenerator;
 import org.hibernate.Hibernate;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.core.context.SecurityContextHolder;
+import pl.kedziorek.medicalcentreapplication.domain.dto.UserRequest;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -67,10 +70,14 @@ public class User {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-    private boolean deleted = Boolean.FALSE;
+    private Boolean deleted = Boolean.FALSE;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     @Override
     public boolean equals(Object o) {
@@ -83,5 +90,22 @@ public class User {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public static User map(UserRequest userRequest, Set<Role> roles) {
+        RandomStringGenerator randomStringGenerator = new RandomStringGenerator.Builder().withinRange(48, 57).withinRange(65,90).withinRange(97,122).build();
+        return User.builder()
+                .uuid(Objects.equals(userRequest.getUuid(), "") ? UUID.randomUUID() : UUID.fromString(userRequest.getUuid()))
+                .name(userRequest.getName())
+                .surname(userRequest.getSurname())
+                .email(userRequest.getEmail())
+                .password(userRequest.getPesel() + randomStringGenerator.generate(5))
+                .pesel(userRequest.getPesel())
+                .phoneNumber(userRequest.getPhoneNumber())
+                .createdBy(SecurityContextHolder.getContext().getAuthentication().getName())
+                .createdAt(LocalDateTime.now())
+                .deleted(Boolean.FALSE)
+                .roles(roles)
+                .build();
     }
 }

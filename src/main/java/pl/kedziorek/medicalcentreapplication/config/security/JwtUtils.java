@@ -31,17 +31,6 @@ public class JwtUtils {
                 .compact();
     }
 
-    public String generateRefreshToken(Authentication authentication) {
-        UserDetailsImpl userPrincipal = new UserDetailsImpl();
-        userPrincipal.setUsername(authentication.getName());
-        return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs + 30 * 60 * 1000))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
-    }
-
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }

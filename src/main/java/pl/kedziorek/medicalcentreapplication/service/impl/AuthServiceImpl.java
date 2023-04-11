@@ -44,7 +44,6 @@ public class AuthServiceImpl implements AuthService {
             Authentication authentication = databaseAuthenticate(credentials);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtils.generateJwtToken(authentication);
-            String refreshToken = jwtUtils.generateRefreshToken(authentication);
             UUID uuid = userRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found in the database")).getUuid();
             List<String> roles = authentication.getAuthorities().stream()
@@ -53,7 +52,6 @@ public class AuthServiceImpl implements AuthService {
             return AuthResponse.builder()
                     .token(jwt)
                     .username(authentication.getName())
-                    .refreshToken(refreshToken)
                     .uuid(uuid.toString())
                     .roles(roles)
                     .build();
