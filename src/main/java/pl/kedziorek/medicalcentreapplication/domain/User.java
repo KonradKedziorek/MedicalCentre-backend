@@ -8,6 +8,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.context.SecurityContextHolder;
+import pl.kedziorek.medicalcentreapplication.config.validator.email.UniqueEmail;
+import pl.kedziorek.medicalcentreapplication.config.validator.pesel.UniquePesel;
+import pl.kedziorek.medicalcentreapplication.config.validator.phoneNumber.ValidPhoneNumber;
 import pl.kedziorek.medicalcentreapplication.domain.dto.UserRequest;
 
 import javax.validation.constraints.Email;
@@ -41,7 +44,7 @@ public class User {
     private String surname;
 
     @NotBlank(message = "Email is mandatory")
-//    @UniqueEmail(message = "User with this email address already exist!")
+    @UniqueEmail(message = "User with this email address already exist!")
     @Email
     private String email;
 
@@ -50,12 +53,11 @@ public class User {
     private String password;
 
     @NotBlank(message = "Pesel is mandatory")
-//    @UniquePesel(message = "User with this pesel already exist!")
+    @UniquePesel(message = "User with this pesel already exist!")
     private String pesel;
 
     @NotBlank(message = "Phone number is mandatory")
-//    @ValidPhoneNumber(message = "Invalid phone number!")
-//    @UniquePhoneNumber(message = "User with this phone number already exist!")
+    @ValidPhoneNumber(message = "Invalid phone number!")
     private String phoneNumber;
 
     @CreatedBy

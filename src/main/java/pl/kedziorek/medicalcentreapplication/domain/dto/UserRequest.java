@@ -1,6 +1,9 @@
 package pl.kedziorek.medicalcentreapplication.domain.dto;
 
 import lombok.*;
+import pl.kedziorek.medicalcentreapplication.config.validator.email.UniqueEmail;
+import pl.kedziorek.medicalcentreapplication.config.validator.pesel.UniquePesel;
+import pl.kedziorek.medicalcentreapplication.config.validator.phoneNumber.ValidPhoneNumber;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -23,17 +26,16 @@ public class UserRequest {
     private String surname;
 
     @NotBlank(message = "Email is mandatory")
-//    @UniqueEmail(message = "User with this email address already exist!")
+    @UniqueEmail(message = "User with this email address already exist!")
     @Email
     private String email;
 
     @NotBlank(message = "Pesel is mandatory")
-//    @UniquePesel(message = "User with this pesel already exist!")
+    @UniquePesel(message = "User with this pesel already exist!")
     private String pesel;
 
     @NotBlank(message = "Phone number is mandatory")
-//    @ValidPhoneNumber(message = "Invalid phone number!")
-//    @UniquePhoneNumber(message = "User with this phone number already exist!")
+    @ValidPhoneNumber(message = "Invalid phone number!")
     private String phoneNumber;
 
     @NotBlank(message = "City is mandatory")

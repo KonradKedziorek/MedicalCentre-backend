@@ -76,6 +76,11 @@ public class UserServiceImpl implements UserService<User> {
     public User editUser(UserRequest userRequest) {
         User user = userRepository.findByUuid(UUID.fromString(userRequest.getUuid())).orElseThrow(() ->
                 new ResourceNotFoundException("User not found in database!"));
+
+        if (user.getDeleted() == Boolean.TRUE) {
+            throw new ResourceNotFoundException("User not found in database!");
+        }
+
         var userRef = changePropertiesValue(userRequest, user);
         return userRepository.save(userRef);
     }
@@ -122,7 +127,12 @@ public class UserServiceImpl implements UserService<User> {
     @Override
     public User deleteUser(UUID uuid) {
         User user = userRepository.findByUuid(uuid).orElseThrow(() ->
-                new ResourceNotFoundException("User not found in database!"));
+                new ResourceNotFoundException("User not found in database!")
+        );
+
+        if (user.getDeleted() == Boolean.TRUE) {
+            throw new ResourceNotFoundException("User not found in database!");
+        }
 
         user.setDeleted(Boolean.TRUE);
 
