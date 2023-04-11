@@ -6,4 +6,5 @@ import pl.kedziorek.medicalcentreapplication.domain.dto.UserRequest;
 public interface UserService<T> {
     User getUser(String username);
     User saveUser(UserRequest user);
+    User editUser(UserRequest userRequest);
 }

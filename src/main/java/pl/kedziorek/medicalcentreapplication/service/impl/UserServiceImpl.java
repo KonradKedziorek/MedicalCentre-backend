@@ -2,8 +2,10 @@ package pl.kedziorek.medicalcentreapplication.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.kedziorek.medicalcentreapplication.config.exception.BadRequestException;
 import pl.kedziorek.medicalcentreapplication.config.exception.ResourceNotFoundException;
 import pl.kedziorek.medicalcentreapplication.domain.Address;
 import pl.kedziorek.medicalcentreapplication.domain.Role;
@@ -17,7 +19,9 @@ import pl.kedziorek.medicalcentreapplication.service.UserService;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +69,53 @@ public class UserServiceImpl implements UserService<User> {
                 notEncodedPassword,
                 user.getCreatedBy()));
 
+        return user;
+    }
+
+    @Override
+    public User editUser(UserRequest userRequest) {
+        User user = userRepository.findByUuid(UUID.fromString(userRequest.getUuid())).orElseThrow(() ->
+                new ResourceNotFoundException("User not found in database!"));
+        var userRef = changePropertiesValue(userRequest, user);
+        return userRepository.save(userRef);
+    }
+
+    private User changePropertiesValue(UserRequest userRequest, User user) {
+        Set<Role> roles = roleService.getRolesByNames(userRequest.getRoles());
+
+        Address address = addressService.findFirstByCityAndPostcodeAndStreetAndLocalNumberAndHouseNumber(
+                userRequest.getCity(),
+                userRequest.getPostcode(),
+                userRequest.getStreet(),
+                userRequest.getLocalNumber(),
+                userRequest.getHouseNumber()
+        );
+
+        if (userRepository.existsUserByEmailAndUuidIsNot(userRequest.getEmail(), user.getUuid())) {
+            throw new BadRequestException("User with that email already exist!");
+        } else {
+            user.setEmail(userRequest.getEmail());
+        }
+
+        if (userRepository.existsUserByPhoneNumberAndUuidIsNot(userRequest.getPhoneNumber(), user.getUuid())) {
+            throw new BadRequestException("User with that phone number already exist!");
+        } else {
+            user.setPhoneNumber(userRequest.getPhoneNumber());
+        }
+
+        if (userRepository.existsUserByPeselAndUuidIsNot(userRequest.getPesel(), user.getUuid())) {
+            throw new BadRequestException("User with that pesel already exist!");
+        } else {
+            user.setPesel(userRequest.getPesel());
+        }
+
+        user.setName(userRequest.getName());
+        user.setSurname(userRequest.getSurname());
+        user.setAddress(address);
+        user.setRoles(roles);
+
+        user.setModifiedAt(LocalDateTime.now());
+        user.setModifiedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         return user;
     }
 }
