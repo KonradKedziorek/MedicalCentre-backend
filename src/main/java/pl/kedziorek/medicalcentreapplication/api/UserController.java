@@ -49,4 +49,10 @@ public class UserController {
             @RequestBody UserRequest userRequest) {
         return ResponseEntity.ok().body(userService.editUser(userRequest));
     }
+
+    @PutMapping("/user/uuid={uuid}/delete")
+    public ResponseEntity<User> deleteUser(
+            @PathVariable UUID uuid) {
+        return ResponseEntity.ok().body(userService.deleteUser(uuid));
+    }
 }

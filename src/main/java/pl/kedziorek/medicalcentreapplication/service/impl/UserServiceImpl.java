@@ -118,4 +118,14 @@ public class UserServiceImpl implements UserService<User> {
         user.setModifiedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         return user;
     }
+
+    @Override
+    public User deleteUser(UUID uuid) {
+        User user = userRepository.findByUuid(uuid).orElseThrow(() ->
+                new ResourceNotFoundException("User not found in database!"));
+
+        user.setDeleted(Boolean.TRUE);
+
+        return user;
+    }
 }
