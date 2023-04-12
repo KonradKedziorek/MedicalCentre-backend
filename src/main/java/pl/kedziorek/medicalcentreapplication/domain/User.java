@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import pl.kedziorek.medicalcentreapplication.config.validator.email.UniqueEmail;
 import pl.kedziorek.medicalcentreapplication.config.validator.pesel.UniquePesel;
 import pl.kedziorek.medicalcentreapplication.config.validator.phoneNumber.ValidPhoneNumber;
+import pl.kedziorek.medicalcentreapplication.domain.dto.DoctorsDto;
 import pl.kedziorek.medicalcentreapplication.domain.dto.UserRequest;
 
 import javax.validation.constraints.Email;
@@ -108,6 +109,13 @@ public class User {
                 .createdAt(LocalDateTime.now())
                 .deleted(Boolean.FALSE)
                 .roles(roles)
+                .build();
+    }
+
+    public static User mapToDoctors(DoctorsDto doctorsDto) {
+        return User.builder()
+                .id(doctorsDto.getId())
+                .name(doctorsDto.getSurname())
                 .build();
     }
 }

@@ -2,20 +2,22 @@ package pl.kedziorek.medicalcentreapplication.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import pl.kedziorek.medicalcentreapplication.domain.Address;
+import pl.kedziorek.medicalcentreapplication.config.exception.ResourceNotFoundException;
 import pl.kedziorek.medicalcentreapplication.domain.ResearchProject;
-import pl.kedziorek.medicalcentreapplication.domain.Role;
 import pl.kedziorek.medicalcentreapplication.domain.User;
 import pl.kedziorek.medicalcentreapplication.domain.dto.ResearchProjectRequest;
-import pl.kedziorek.medicalcentreapplication.domain.dto.UserRequest;
 import pl.kedziorek.medicalcentreapplication.repository.ResearchProjectRepository;
 import pl.kedziorek.medicalcentreapplication.service.ResearchProjectService;
 import pl.kedziorek.medicalcentreapplication.service.UserService;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,15 +28,37 @@ public class ResearchProjectServiceImpl implements ResearchProjectService {
     private final ResearchProjectRepository researchProjectRepository;
 
     @Override
+    public ResearchProject saveOfUpdateResearchProject(ResearchProjectRequest researchProjectRequest) {
+        // if uuid is null should create new object
+        if (Objects.equals(researchProjectRequest.getUuid(), "")) {
+            log.info("Saving new complaint to the database");
+            return saveResearchProject(researchProjectRequest);
+        }// else update existing object
+        return editResearchProject(researchProjectRequest);
+    }
+
     @Valid
     public ResearchProject saveResearchProject(ResearchProjectRequest researchProjectRequest) {
         log.info("Saving new user to the database");
         Set<User> doctors = userService.getUsersByIdAndSurname(researchProjectRequest.getDoctors());
-
         ResearchProject researchProject = ResearchProject.map(researchProjectRequest, doctors);
-
         researchProjectRepository.save(researchProject);
+        return researchProject;
+    }
 
+    private ResearchProject editResearchProject(ResearchProjectRequest researchProjectRequest) {
+        ResearchProject researchProject = researchProjectRepository.findByUuid(UUID.fromString(researchProjectRequest.getUuid()))
+                .orElseThrow(() -> new ResourceNotFoundException("Research project does not exist!"));
+        var researchProjectRef = changePropertiesValue(researchProjectRequest, researchProject);
+        return researchProjectRepository.save(researchProjectRef);
+    }
+
+    private ResearchProject changePropertiesValue(ResearchProjectRequest researchProjectRequest, ResearchProject researchProject) {
+        researchProject.setName(researchProjectRequest.getName());
+        researchProject.setDescription(researchProjectRequest.getDescription());
+        researchProject.setDoctors(userService.getUsersByIdAndSurname(researchProjectRequest.getDoctors()));
+        researchProject.setModifiedAt(LocalDateTime.now());
+        researchProject.setModifiedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         return researchProject;
     }
 }

@@ -19,8 +19,8 @@ import javax.validation.Valid;
 public class ResearchProjectController {
     private final ResearchProjectService researchProjectService;
 
-    @PostMapping("/researchProject/save")
+    @PostMapping("/researchProject/saveOrUpdate")
     public ResponseEntity<?> saveResearchProject(@Valid @RequestBody ResearchProjectRequest researchProjectRequest) {
-        return ResponseEntity.ok().body(researchProjectService.saveResearchProject(researchProjectRequest));
+        return ResponseEntity.ok().body(researchProjectService.saveOfUpdateResearchProject(researchProjectRequest));
     }
 }
