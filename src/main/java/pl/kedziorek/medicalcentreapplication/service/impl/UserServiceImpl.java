@@ -10,6 +10,7 @@ import pl.kedziorek.medicalcentreapplication.config.exception.ResourceNotFoundEx
 import pl.kedziorek.medicalcentreapplication.domain.Address;
 import pl.kedziorek.medicalcentreapplication.domain.Role;
 import pl.kedziorek.medicalcentreapplication.domain.User;
+import pl.kedziorek.medicalcentreapplication.domain.dto.DoctorsDto;
 import pl.kedziorek.medicalcentreapplication.domain.dto.UserRequest;
 import pl.kedziorek.medicalcentreapplication.repository.UserRepository;
 import pl.kedziorek.medicalcentreapplication.service.AddressService;
@@ -20,6 +21,7 @@ import pl.kedziorek.medicalcentreapplication.service.UserService;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -68,7 +70,6 @@ public class UserServiceImpl implements UserService<User> {
                 userRequest.getName(),
                 notEncodedPassword,
                 user.getCreatedBy()));
-
         return user;
     }
 
@@ -84,6 +85,17 @@ public class UserServiceImpl implements UserService<User> {
         var userRef = changePropertiesValue(userRequest, user);
         return userRepository.save(userRef);
     }
+
+    @Override
+    public User activateUserAccount(String pesel) {
+        User user = userRepository.findByPesel(pesel).orElseThrow(() ->
+                new ResourceNotFoundException("User not found in database!"));
+
+        user.setDeleted(Boolean.FALSE);
+
+        return userRepository.save(user);
+    }
+
 
     private User changePropertiesValue(UserRequest userRequest, User user) {
         Set<Role> roles = roleService.getRolesByNames(userRequest.getRoles());
@@ -137,5 +149,18 @@ public class UserServiceImpl implements UserService<User> {
         user.setDeleted(Boolean.TRUE);
 
         return user;
+    }
+
+    @Override
+    public Set<User> getUsersByIdAndSurname(Set<DoctorsDto> doctors) {
+        Set<User> doctorsList = new HashSet<>();
+        for (DoctorsDto doctor : doctors) {
+            if (userRepository.findUserByIdAndSurname(doctor.getId(), doctor.getSurname()).isPresent()) {
+                doctorsList.add(userRepository.findUserByIdAndSurname(doctor.getId(), doctor.getSurname())
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                String.format("Doctor %s not found in the database", doctor.getSurname()))));
+            }
+        }
+        return doctorsList;
     }
 }

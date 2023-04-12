@@ -146,4 +146,66 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="create_research_project_table" author="Konrad Kędziorek">
+        <createTable tableName="research_project">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="modified_at" type="datetime" >
+                <constraints nullable="true"/>
+            </column>
+            <column name="deleted" type="boolean" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-AutoIncrement-to-research-project-id" author="Konrad Kędziorek" >
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          schemaName="public"
+                          tableName="research_project"/>
+    </changeSet>
+
+    <changeSet id="create_research_project_patients_table" author="Konrad Kędziorek">
+        <createTable tableName="research_project_patients">
+            <column name="research_project_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="patients_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_research_project_doctors_table" author="Konrad Kędziorek">
+        <createTable tableName="research_project_doctors">
+            <column name="research_project_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="doctors_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

@@ -34,7 +34,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Credentials credentials, HttpServletResponse response) throws IllegalAccessException {
         AuthResponse authResponse = authenticate.authenticate(credentials);
-        Cookie tokenCookie = buildCookie(7 * 24 * 60 * 60, true, true, "/", domain, authResponse.getToken(), "token");
+        Cookie tokenCookie = buildCookie(7 * 24 * 60 * 60, false, true, "/", domain, authResponse.getToken(), "token");
         response.addCookie(tokenCookie);
         return ResponseEntity.ok(authResponse);
     }
@@ -48,6 +48,12 @@ public class UserController {
     public ResponseEntity<User> editUser(
             @RequestBody UserRequest userRequest) {
         return ResponseEntity.ok().body(userService.editUser(userRequest));
+    }
+
+    @PutMapping("/user/activateAccount/pesel={pesel}")
+    public ResponseEntity<User> activateAccount(
+            @PathVariable String pesel) {
+        return ResponseEntity.ok().body(userService.activateUserAccount(pesel));
     }
 
     @PutMapping("/user/uuid={uuid}/delete")
