@@ -1,5 +1,6 @@
 package pl.kedziorek.medicalcentreapplication.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.apache.commons.text.RandomStringGenerator;
 import org.hibernate.Hibernate;
@@ -18,10 +19,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
@@ -81,6 +79,9 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id")
     private Address address;
+
+    @OneToMany(mappedBy = "user")
+    private List<Permission> permissions = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

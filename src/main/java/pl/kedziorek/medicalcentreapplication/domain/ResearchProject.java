@@ -10,10 +10,7 @@ import pl.kedziorek.medicalcentreapplication.domain.dto.ResearchProjectRequest;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
@@ -53,6 +50,9 @@ public class ResearchProject {
     private LocalDateTime modifiedAt;
 
     private Boolean deleted = Boolean.FALSE;
+
+    @OneToMany(mappedBy = "researchProject")
+    private List<Permission> permissions = new ArrayList<>();
 
     public static ResearchProject map(ResearchProjectRequest researchProjectRequest, Set<User> doctors) {
         return ResearchProject.builder()

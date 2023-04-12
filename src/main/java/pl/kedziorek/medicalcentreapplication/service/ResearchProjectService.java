@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface ResearchProjectService {
     ResearchProject saveOfUpdateResearchProject(ResearchProjectRequest researchProjectRequest);
     ResearchProject deleteResearchProject(UUID uuid);
+    ResearchProject getResearchProject(UUID uuid);
 }

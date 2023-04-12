@@ -29,6 +29,11 @@ public class ResearchProjectServiceImpl implements ResearchProjectService {
     private final ResearchProjectRepository researchProjectRepository;
 
     @Override
+    public ResearchProject getResearchProject(UUID uuid) {
+        return researchProjectRepository.findByUuid(uuid).orElseThrow(() -> new ResourceNotFoundException("Ni mo"));
+    }
+
+    @Override
     public ResearchProject saveOfUpdateResearchProject(ResearchProjectRequest researchProjectRequest) {
         // if uuid is null should create new object
         if (Objects.equals(researchProjectRequest.getUuid(), "")) {

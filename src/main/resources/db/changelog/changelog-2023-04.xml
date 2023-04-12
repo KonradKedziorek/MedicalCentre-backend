@@ -208,4 +208,47 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="add_permission_table" author="Konrad Kędziorek">
+        <createTable tableName="permission">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permission_dir" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="boolean" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="research_project_id" type="bigint" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-AutoIncrement-to-permission-id" author="Konrad Kędziorek" >
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          schemaName="public"
+                          tableName="permission"/>
+    </changeSet>
+
 </databaseChangeLog>
