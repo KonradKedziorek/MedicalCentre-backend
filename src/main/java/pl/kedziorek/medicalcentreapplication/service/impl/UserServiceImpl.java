@@ -141,11 +141,9 @@ public class UserServiceImpl implements UserService<User> {
         User user = userRepository.findByUuid(uuid).orElseThrow(() ->
                 new ResourceNotFoundException("User not found in database!")
         );
-
         if (user.getDeleted() == Boolean.TRUE) {
             throw new ResourceNotFoundException("User not found in database!");
         }
-
         user.setDeleted(Boolean.TRUE);
 
         return user;

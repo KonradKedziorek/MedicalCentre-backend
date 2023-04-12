@@ -15,6 +15,7 @@ import pl.kedziorek.medicalcentreapplication.service.UserService;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -59,6 +60,22 @@ public class ResearchProjectServiceImpl implements ResearchProjectService {
         researchProject.setDoctors(userService.getUsersByIdAndSurname(researchProjectRequest.getDoctors()));
         researchProject.setModifiedAt(LocalDateTime.now());
         researchProject.setModifiedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+        return researchProject;
+    }
+
+    @Override
+    public ResearchProject deleteResearchProject(UUID uuid) {
+        ResearchProject researchProject = researchProjectRepository.findByUuid(uuid).orElseThrow(() ->
+                new ResourceNotFoundException("Research project not found in database!")
+        );
+        if (researchProject.getDeleted() == Boolean.TRUE) {
+            throw new ResourceNotFoundException("Research project not found in database!");
+        }
+        researchProject.setDeleted(Boolean.TRUE);
+
+        researchProject.setDoctors(Collections.emptySet());
+        researchProject.setPatients(Collections.emptySet());
+
         return researchProject;
     }
 }
