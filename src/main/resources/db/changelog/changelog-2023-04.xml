@@ -310,4 +310,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="add_date_of_research_column_in_commission_table" author="Konrad Kędziorek">
+        <addColumn schemaName= "public" tableName="commission" >
+            <column name="date_of_research" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

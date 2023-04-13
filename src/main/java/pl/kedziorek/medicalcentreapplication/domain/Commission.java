@@ -8,7 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import pl.kedziorek.medicalcentreapplication.domain.dto.CommissionRequest;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,6 +31,8 @@ public class Commission {
     private String typeOfResearch;
 
     private String description;
+
+    private LocalDateTime dateOfResearch;
 
     @CreatedBy
     private String createdBy;
@@ -53,6 +57,11 @@ public class Commission {
                 .uuid(Objects.equals(commissionRequest.getUuid(), "") ? UUID.randomUUID() : UUID.fromString(commissionRequest.getUuid()))
                 .typeOfResearch(commissionRequest.getTypeOfResearch())
                 .description(commissionRequest.getDescription())
+                .dateOfResearch(LocalDateTime.of(
+                                LocalDate.parse(commissionRequest.getDateOfResearch()),
+                                LocalTime.parse(commissionRequest.getTimeOfResearch())
+                        )
+                )
                 .createdBy(SecurityContextHolder.getContext().getAuthentication().getName())
                 .createdAt(LocalDateTime.now())
                 .user(user)
