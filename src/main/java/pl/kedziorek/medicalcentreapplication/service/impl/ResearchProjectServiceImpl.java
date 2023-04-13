@@ -37,7 +37,7 @@ public class ResearchProjectServiceImpl implements ResearchProjectService {
     public ResearchProject saveOfUpdateResearchProject(ResearchProjectRequest researchProjectRequest) {
         // if uuid is null should create new object
         if (Objects.equals(researchProjectRequest.getUuid(), "")) {
-            log.info("Saving new complaint to the database");
+            log.info("Saving new research project to the database");
             return saveResearchProject(researchProjectRequest);
         }// else update existing object
         return editResearchProject(researchProjectRequest);
@@ -45,7 +45,7 @@ public class ResearchProjectServiceImpl implements ResearchProjectService {
 
     @Valid
     public ResearchProject saveResearchProject(ResearchProjectRequest researchProjectRequest) {
-        log.info("Saving new user to the database");
+        log.info("Saving new research project to the database");
         Set<User> doctors = userService.getUsersByIdAndSurname(researchProjectRequest.getDoctors());
         ResearchProject researchProject = ResearchProject.map(researchProjectRequest, doctors);
         researchProjectRepository.save(researchProject);

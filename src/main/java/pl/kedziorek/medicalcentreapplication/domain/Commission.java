@@ -43,7 +43,12 @@ public class Commission {
     @JsonIgnore
     private User user;
 
-    public static Commission map(CommissionRequest commissionRequest, User user) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "research_project_id")
+    @JsonIgnore
+    private ResearchProject researchProject;
+
+    public static Commission map(CommissionRequest commissionRequest, User user, ResearchProject researchProject) {
         return Commission.builder()
                 .uuid(Objects.equals(commissionRequest.getUuid(), "") ? UUID.randomUUID() : UUID.fromString(commissionRequest.getUuid()))
                 .typeOfResearch(commissionRequest.getTypeOfResearch())
@@ -51,6 +56,7 @@ public class Commission {
                 .createdBy(SecurityContextHolder.getContext().getAuthentication().getName())
                 .createdAt(LocalDateTime.now())
                 .user(user)
+                .researchProject(researchProject)
                 .deleted(Boolean.FALSE)
                 .build();
     }

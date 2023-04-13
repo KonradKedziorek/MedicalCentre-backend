@@ -54,6 +54,9 @@ public class ResearchProject {
     @OneToMany(mappedBy = "researchProject")
     private List<Permission> permissions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "researchProject")
+    private List<Commission> commissions = new ArrayList<>();
+
     public static ResearchProject map(ResearchProjectRequest researchProjectRequest, Set<User> doctors) {
         return ResearchProject.builder()
                 .uuid(Objects.equals(researchProjectRequest.getUuid(), "") ? UUID.randomUUID() : UUID.fromString(researchProjectRequest.getUuid()))

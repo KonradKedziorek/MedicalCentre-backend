@@ -15,5 +15,8 @@ public class CommissionRequest {
     @NotBlank(message = "Type of research is mandatory!")
     private String typeOfResearch;
     private String description;
+    @NotBlank(message = "User is mandatory!")
     private String userPesel;
+    @NotBlank(message = "Research project is mandatory!")
+    private String researchProjectUuid;
 }

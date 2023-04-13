@@ -122,6 +122,8 @@ public class PermissionServiceImpl implements PermissionService {
         rp.getPermissions().remove(permission);
         rp.getPatients().remove(user);
 
+//        user.getCommissions().remove(rp)
+
 //        researchProjectRepository.findByUuid(permission.getResearchProject().getUuid()).ifPresent(
 //                project -> project.getPermissions().remove(permission)
 //        );

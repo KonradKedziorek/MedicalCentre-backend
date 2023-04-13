@@ -302,4 +302,12 @@
                           tableName="commission"/>
     </changeSet>
 
+    <changeSet id="add_research_project_column_in_commission_table" author="Konrad Kędziorek">
+        <addColumn schemaName= "public" tableName="commission" >
+            <column name="research_project_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
