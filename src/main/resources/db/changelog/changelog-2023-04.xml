@@ -318,4 +318,44 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="add_result_table" author="Konrad Kędziorek">
+        <createTable tableName="result">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="uuid" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="result_description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified_by" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="modified_at" type="datetime" >
+                <constraints nullable="true"/>
+            </column>
+            <column name="deleted" type="boolean" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="commission_id" type="bigint" >
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-AutoIncrement-to-result-id" author="Konrad Kędziorek" >
+        <addAutoIncrement columnDataType="bigint"
+                          columnName="id"
+                          incrementBy="1"
+                          schemaName="public"
+                          tableName="result"/>
+    </changeSet>
+
 </databaseChangeLog>

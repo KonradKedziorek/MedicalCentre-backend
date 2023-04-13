@@ -30,7 +30,8 @@ public class ResearchProjectServiceImpl implements ResearchProjectService {
 
     @Override
     public ResearchProject getResearchProject(UUID uuid) {
-        return researchProjectRepository.findByUuid(uuid).orElseThrow(() -> new ResourceNotFoundException("Ni mo"));
+        return researchProjectRepository.findByUuid(uuid).orElseThrow(() ->
+                new ResourceNotFoundException("Research project not found in database"));
     }
 
     @Override

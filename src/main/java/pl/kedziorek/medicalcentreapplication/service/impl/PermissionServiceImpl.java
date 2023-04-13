@@ -9,10 +9,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.kedziorek.medicalcentreapplication.config.exception.ResourceNotFoundException;
+import pl.kedziorek.medicalcentreapplication.domain.Commission;
 import pl.kedziorek.medicalcentreapplication.domain.Permission;
 import pl.kedziorek.medicalcentreapplication.domain.ResearchProject;
 import pl.kedziorek.medicalcentreapplication.domain.User;
 import pl.kedziorek.medicalcentreapplication.domain.dto.PermissionRequest;
+import pl.kedziorek.medicalcentreapplication.repository.CommissionRepository;
 import pl.kedziorek.medicalcentreapplication.repository.PermissionRepository;
 import pl.kedziorek.medicalcentreapplication.repository.ResearchProjectRepository;
 import pl.kedziorek.medicalcentreapplication.repository.UserRepository;
@@ -36,6 +38,7 @@ public class PermissionServiceImpl implements PermissionService {
     private final PermissionRepository permissionRepository;
     private final UserRepository userRepository;
     private final ResearchProjectRepository researchProjectRepository;
+    private final CommissionRepository commissionRepository;
 
     @Value("${permissions.dir}")
     private String permissionsDir;
@@ -106,10 +109,6 @@ public class PermissionServiceImpl implements PermissionService {
         FileUtils.forceDelete(file);
         permission.setDeleted(Boolean.TRUE);
 
-//        userRepository.findByUuid(permission.getUser().getUuid()).ifPresent(
-//                user1 -> user1.getPermissions().remove(permission)
-//        );
-
         User user = userRepository.findByUuid(permission.getUser().getUuid()).orElseThrow(() ->
                 new ResourceNotFoundException("User not found in database")
         );
@@ -121,16 +120,6 @@ public class PermissionServiceImpl implements PermissionService {
         permission.setResearchProject(null);
         rp.getPermissions().remove(permission);
         rp.getPatients().remove(user);
-
-//        user.getCommissions().remove(rp)
-
-//        researchProjectRepository.findByUuid(permission.getResearchProject().getUuid()).ifPresent(
-//                project -> project.getPermissions().remove(permission)
-//        );
-
-//        researchProjectRepository.findByUuid(permission.getResearchProject().getUuid()).ifPresent(
-//                researchProject -> researchProject.getPatients().remove(permission.getUser())
-//        );
 
         return permission;
     }
