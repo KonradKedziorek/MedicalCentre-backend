@@ -30,7 +30,7 @@ public class CommissionController {
     }
 
     @GetMapping("/commission/uuid={uuid}/get")
-    public ResponseEntity<Commission> getResearchProject(
+    public ResponseEntity<Commission> getCommission(
             @PathVariable UUID uuid) {
         return ResponseEntity.ok(commissionService.getCommission(uuid));
     }

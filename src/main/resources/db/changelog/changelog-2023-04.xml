@@ -358,4 +358,113 @@
                           tableName="result"/>
     </changeSet>
 
+    <changeSet id="insert_roles_to_role_table" author="Konrad Kędziorek">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="role">
+            <column  name="id"  value="1"/>
+            <column  name="name"  value="ADMIN"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role">
+            <column  name="id"  value="2"/>
+            <column  name="name"  value="DOCTOR"/>
+        </insert>
+        <insert  dbms="postgresql"
+                 schemaName="public"
+                 tableName="role">
+            <column  name="id"  value="3"/>
+            <column  name="name"  value="PATIENT"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_address_to_address_table" author="Konrad Kędziorek">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="address">
+            <column  name="id"  value="1"/>
+            <column  name="uuid"  value="894cf036-45cc-4073-9d4e-aecc781adaad"/>
+            <column  name="city"  value="TestCity"/>
+            <column  name="postcode"  value="15-400"/>
+            <column  name="street"  value="Test Street"/>
+            <column  name="local_number"  value="1"/>
+            <column  name="house_number"  value="1"/>
+            <column  name="created_by"  value="migration"/>
+            <column  name="created_at"  value="2023-04-14 00:47:10.959"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_users_to_user_table" author="Konrad Kędziorek">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="user">
+            <column  name="id"  value="1"/>
+            <column  name="uuid"  value="da4225f8-5251-4b6d-8b4e-0c3d2f491258"/>
+            <column  name="name"  value="admin"/>
+            <column  name="surname"  value="admin"/>
+            <column  name="email"  value="admin@email.com"/>
+            <column  name="password"  value="$2a$12$i11exqSX1OyCRNjAguhJmeDGNiuLJAdNkS4El1r1xksM.FaMw3jTy"/>
+            <column  name="pesel"  value="95767656563"/>
+            <column  name="phone_number"  value="666777888"/>
+            <column  name="created_by"  value="migration"/>
+            <column  name="created_at"  value="2023-04-14 00:47:10.959"/>
+            <column  name="deleted"  value="false"/>
+            <column  name="address_id"  value="1"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="user">
+            <column  name="id"  value="2"/>
+            <column  name="uuid"  value="27fa9d40-469c-45a2-b2cf-f0dbe7fc58ff"/>
+            <column  name="name"  value="doctor"/>
+            <column  name="surname"  value="doctor"/>
+            <column  name="email"  value="doctor@email.com"/>
+            <column  name="password"  value="$2a$12$b9H86ze0DSRLebU6b9nNHu7Jyo1Llwf6ec4505gLMVhzz99YtFuN."/>
+            <column  name="pesel"  value="98767651563"/>
+            <column  name="phone_number"  value="666777889"/>
+            <column  name="created_by"  value="migration"/>
+            <column  name="created_at"  value="2023-04-14 00:47:10.959"/>
+            <column  name="deleted"  value="false"/>
+            <column  name="address_id"  value="1"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="user">
+            <column  name="id"  value="3"/>
+            <column  name="uuid"  value="4378e52d-45e7-4c84-bb3b-6d919353dd24"/>
+            <column  name="name"  value="patient"/>
+            <column  name="surname"  value="patient"/>
+            <column  name="email"  value="patient@email.com"/>
+            <column  name="password"  value="$2a$12$UyTlrDp8WuX0sEVYj8oDI.qfgd8PjeEvf8ODLxxGQLeFNZ.K3gvwC"/>
+            <column  name="pesel"  value="98767656563"/>
+            <column  name="phone_number"  value="666771888"/>
+            <column  name="created_by"  value="migration"/>
+            <column  name="created_at"  value="2023-04-14 00:47:10.959"/>
+            <column  name="deleted"  value="false"/>
+            <column  name="address_id"  value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_roles_and_users_to_user_roles_table" author="Konrad Kędziorek">
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="user_roles">
+            <column  name="user_id"  value="1"/>
+            <column  name="roles_id"  value="1"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="user_roles">
+            <column  name="user_id"  value="2"/>
+            <column  name="roles_id"  value="2"/>
+        </insert>
+        <insert dbms="postgresql"
+                schemaName="public"
+                tableName="user_roles">
+            <column  name="user_id"  value="3"/>
+            <column  name="roles_id"  value="3"/>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
