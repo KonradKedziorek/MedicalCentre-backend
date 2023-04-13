@@ -29,9 +29,9 @@ public class ResearchProjectController {
         return ResponseEntity.ok().body(researchProjectService.deleteResearchProject(uuid));
     }
 
-//    @GetMapping("/researchProject/uuid={uuid}/get")
-//    public ResponseEntity<ResearchProject> getResearchProject(
-//            @PathVariable UUID uuid) {
-//        return ResponseEntity.ok(researchProjectService.getResearchProject(uuid));
-//    }
+    @GetMapping("/researchProject/uuid={uuid}/get")
+    public ResponseEntity<ResearchProject> getResearchProject(
+            @PathVariable UUID uuid) {
+        return ResponseEntity.ok(researchProjectService.getResearchProject(uuid));
+    }
 }

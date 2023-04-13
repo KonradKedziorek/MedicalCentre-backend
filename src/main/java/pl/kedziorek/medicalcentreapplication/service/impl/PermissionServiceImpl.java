@@ -2,6 +2,7 @@ package pl.kedziorek.medicalcentreapplication.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.kedziorek.medicalcentreapplication.config.exception.ResourceNotFoundException;
 import pl.kedziorek.medicalcentreapplication.domain.Permission;
+import pl.kedziorek.medicalcentreapplication.domain.ResearchProject;
+import pl.kedziorek.medicalcentreapplication.domain.User;
 import pl.kedziorek.medicalcentreapplication.domain.dto.PermissionRequest;
 import pl.kedziorek.medicalcentreapplication.repository.PermissionRepository;
 import pl.kedziorek.medicalcentreapplication.repository.ResearchProjectRepository;
@@ -91,5 +94,42 @@ public class PermissionServiceImpl implements PermissionService {
         permission.setCreatedAt(LocalDateTime.now());
         permission.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         permission.setDeleted(Boolean.FALSE);
+    }
+
+    @Override
+    public Permission deletePermission(UUID uuid) throws IOException {
+        Permission permission = permissionRepository.findByUuid(uuid)
+                .orElseThrow(() -> new ResourceNotFoundException("Permission with uuid: {uuid} not found in database"));
+
+        File file = new File(permission.getPermissionDir());
+
+        FileUtils.forceDelete(file);
+        permission.setDeleted(Boolean.TRUE);
+
+//        userRepository.findByUuid(permission.getUser().getUuid()).ifPresent(
+//                user1 -> user1.getPermissions().remove(permission)
+//        );
+
+        User user = userRepository.findByUuid(permission.getUser().getUuid()).orElseThrow(() ->
+                new ResourceNotFoundException("User not found in database")
+        );
+        permission.setUser(null);
+        user.getPermissions().remove(permission);
+
+        ResearchProject rp = researchProjectRepository.findByUuid(permission.getResearchProject().getUuid())
+                .orElseThrow(() -> new ResourceNotFoundException("Research project not found in database"));
+        permission.setResearchProject(null);
+        rp.getPermissions().remove(permission);
+        rp.getPatients().remove(user);
+
+//        researchProjectRepository.findByUuid(permission.getResearchProject().getUuid()).ifPresent(
+//                project -> project.getPermissions().remove(permission)
+//        );
+
+//        researchProjectRepository.findByUuid(permission.getResearchProject().getUuid()).ifPresent(
+//                researchProject -> researchProject.getPatients().remove(permission.getUser())
+//        );
+
+        return permission;
     }
 }

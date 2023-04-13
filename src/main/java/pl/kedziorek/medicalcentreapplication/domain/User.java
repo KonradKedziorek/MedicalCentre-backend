@@ -1,6 +1,5 @@
 package pl.kedziorek.medicalcentreapplication.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.apache.commons.text.RandomStringGenerator;
 import org.hibernate.Hibernate;
@@ -15,9 +14,9 @@ import pl.kedziorek.medicalcentreapplication.config.validator.phoneNumber.ValidP
 import pl.kedziorek.medicalcentreapplication.domain.dto.DoctorsDto;
 import pl.kedziorek.medicalcentreapplication.domain.dto.UserRequest;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -82,6 +81,9 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Permission> permissions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Commission> commissions = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

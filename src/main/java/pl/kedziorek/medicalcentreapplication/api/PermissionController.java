@@ -11,6 +11,7 @@ import pl.kedziorek.medicalcentreapplication.service.PermissionService;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -27,12 +28,9 @@ public class PermissionController {
         return ResponseEntity.ok().body(permissionService.savePermission(multipartFile, permissionRequest));
     }
 
-/*
-    @PostMapping(value = "/addRecipe", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Recipe> addRecipe(@Valid @RequestPart Recipe recipe, //TODO: do przemyślenia
-                                            @RequestParam(value = "file", required = false) MultipartFile[] imagesBytes){
-        return ResponseEntity.ok().body(recipeService.addRecipe(recipe, imagesBytes));
+    @DeleteMapping("/permission/uuid={uuid}/delete")
+    public ResponseEntity<?> deletePermission (@PathVariable UUID uuid) throws IOException {
+        return ResponseEntity.ok().body(permissionService.deletePermission(uuid));
     }
-*/
 
 }

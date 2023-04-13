@@ -44,10 +44,10 @@ public class UserController {
         return ResponseEntity.ok().body(userService.saveUser(user));
     }
 
-//    @GetMapping("/user/email={email}/get")
-//    public ResponseEntity<User> getUser(@PathVariable String email) {
-//        return ResponseEntity.ok().body(userService.getUser(email));
-//    }
+    @GetMapping("/user/email={email}/get")
+    public ResponseEntity<User> getUser(@PathVariable String email) {
+        return ResponseEntity.ok().body(userService.getUser(email));
+    }
 
     @PutMapping("/user/edit")
     public ResponseEntity<User> editUser(
